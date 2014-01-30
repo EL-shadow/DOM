@@ -31,48 +31,32 @@ function openPopupFromLink(link) {
 function createPopup(title, message, onOk) {
     var popup = document.createElement("div");
     popup.classList.add("overlay");
-    var wrap1 = document.createElement("div");
-    wrap1.classList.add("popup-wrap_table");
-    popup.appendChild(wrap1);
-    var wrap2 = document.createElement("div");
-    wrap2.classList.add("popup-wrap_cell");
-    wrap1.appendChild(wrap2);
-    var content = document.createElement("div");
-    content.classList.add("popup");
-    wrap2.appendChild(content);
-    var button = document.createElement("div");
-    button.classList.add("close-button");
-    button.innerHTML="&times;";
-    button.addEventListener("click",function(){
+    popup.innerHTML='' +
+        '<div class="popup-wrap_table">' +
+            '<div class="popup-wrap_cell">' +
+                '<div class="popup">' +
+                    '<div class="close-button">&times;</div>' +
+                    '<strong>' + title + '</strong>' +
+                    '<p>'+ message +'</p>' +
+                    '<p class="buttons">' +
+                        '<span class="button">Да</span>' +
+                        '<span class="button">Нет</span>' +
+                    '</p>'+
+                '</div>'+
+            '</div>'+
+        '</div>';
+    popup.getElementsByClassName("close-button")[0].addEventListener("click",function(){
         popup.remove();
     },false);
-    content.appendChild(button);
-    var titleElem = document.createElement("strong");
-    titleElem.innerHTML=title;
-    content.appendChild(titleElem);
-    var messageEelem = document.createElement("p");
-    messageEelem.innerHTML=message;
-    content.appendChild(messageEelem);
-
-    var buttons = document.createElement("p");
-    buttons.classList.add("buttons");
-    buttons.appendChild(document.createElement("span"));
-    buttons.appendChild(document.createElement("span"));
-    buttons.children[0].className="button";
-    buttons.children[0].innerHTML="Да";
-    buttons.children[0].addEventListener("click",function(){onOk();},false);
-    buttons.children[1].className="button";
-    buttons.children[1].innerHTML="Нет";
-    buttons.children[1].addEventListener("click",function(){
+    popup.getElementsByClassName("button")[0].addEventListener("click",onOk,false);
+    popup.getElementsByClassName("button")[1].addEventListener("click",function(){
         popup.remove();
     },false);
-    content.appendChild(buttons);
     document.body.appendChild(popup);
 }
 
-var links = document.getElementsByClassName("popup-link");
-for (var i=0;i<links.length;i++){
-    links[i].addEventListener("click",function(e){
+document.addEventListener("click",function(e){
+    if (e.target.tagName=="A" && e.target.dataset.title!==window.undefined && e.target.dataset.message!==window.undefined){
         _onMouseClick(e);
-    },false);
-}
+    }
+},false);

@@ -46,7 +46,7 @@ body
     width:18px;
     height:18px;
     border-radius: 9px;
-    cursor: pointer;
+    cursor: default;
 }
 .close-button:hover{
     background: #999;
