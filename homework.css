@@ -14,7 +14,13 @@ body
     background: rgba(102,102,102,0.5);
     left:0;
     top:0;
+    display:none;
 }
+
+.overlay.open{
+    display:block;
+}
+
 .popup-wrap_table{
     display: table;
     width:100%;

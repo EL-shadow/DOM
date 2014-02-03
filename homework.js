@@ -18,7 +18,19 @@ function openPopupFromLink(link) {
     var message = link.dataset.message;
     var onOk = function(){window.location=link.href;};
     message = message.replace("%s",link.href);
-    createPopup(title,message,onOk);
+    var popup = document.querySelector(".overlay");
+    if (popup==null){
+        createPopup(title,message,onOk);
+    }
+    else{
+        popup.querySelector(".title").innerHTML=title;
+        popup.querySelector(".message").innerHTML=message;
+        var oldYes = popup.querySelector(".button.yes");
+        var newYes = oldYes.cloneNode(true);
+        newYes.addEventListener("click",onOk,false);
+        oldYes.parentNode.replaceChild(newYes,oldYes);
+        popup.classList.toggle("open");
+    }
 }
 
 /**
@@ -30,27 +42,27 @@ function openPopupFromLink(link) {
  */
 function createPopup(title, message, onOk) {
     var popup = document.createElement("div");
-    popup.classList.add("overlay");
+    popup.className="overlay open";
     popup.innerHTML='' +
         '<div class="popup-wrap_table">' +
             '<div class="popup-wrap_cell">' +
                 '<div class="popup">' +
                     '<div class="close-button">&times;</div>' +
-                    '<strong>' + title + '</strong>' +
-                    '<p>'+ message +'</p>' +
+                    '<strong class="title">' + title + '</strong>' +
+                    '<p class="message">'+ message +'</p>' +
                     '<p class="buttons">' +
-                        '<span class="button">Да</span>' +
-                        '<span class="button">Нет</span>' +
+                        '<span class="button yes">Да</span>' +
+                        '<span class="button no">Нет</span>' +
                     '</p>'+
                 '</div>'+
             '</div>'+
         '</div>';
     popup.getElementsByClassName("close-button")[0].addEventListener("click",function(){
-        popup.remove();
+        popup.classList.remove("open")
     },false);
     popup.getElementsByClassName("button")[0].addEventListener("click",onOk,false);
     popup.getElementsByClassName("button")[1].addEventListener("click",function(){
-        popup.remove();
+        popup.classList.remove("open")
     },false);
     document.body.appendChild(popup);
 }
